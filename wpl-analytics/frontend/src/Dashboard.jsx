@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Dashboard.css';
+import PlayerChart from './PlayerChart';
+import ChatBot from './ChatBot';
 
 const API_URL = 'http://localhost:5000';
 
@@ -10,7 +12,6 @@ function Dashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Fetch all players on load
   useEffect(() => {
     fetchPlayers();
   }, []);
@@ -29,7 +30,6 @@ function Dashboard() {
     }
   };
 
-  // Filter players by search
   const filteredPlayers = players.filter(p =>
     p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     p.team.toLowerCase().includes(searchTerm.toLowerCase())
@@ -37,15 +37,13 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
-      {/* Header */}
       <header className="header">
         <h1>🏏 WPL Player Analytics</h1>
         <p>Performance Analysis & Predictions</p>
       </header>
 
-      {/* Main Content */}
-      <div className="container">
-        {/* Sidebar - Player List */}
+      <div className="dashboard-layout">
+        {/* Left Sidebar */}
         <aside className="sidebar">
           <div className="search-box">
             <input
@@ -56,7 +54,6 @@ function Dashboard() {
               className="search-input"
             />
           </div>
-
           <div className="player-list">
             {loading ? (
               <p className="loading">Loading players...</p>
@@ -79,7 +76,7 @@ function Dashboard() {
           </div>
         </aside>
 
-        {/* Main Content - Player Details */}
+        {/* Main Content */}
         <main className="main-content">
           {selectedPlayer ? (
             <div className="player-details">
@@ -87,11 +84,10 @@ function Dashboard() {
               <p className="player-info">
                 {selectedPlayer.team} • {selectedPlayer.role}
               </p>
-
+              <PlayerChart player={selectedPlayer} />
               <div className="stats-title">
                 <h3>Seasonal Statistics</h3>
               </div>
-
               <div className="stats-grid">
                 {Object.entries(selectedPlayer.seasonal_stats || {})
                   .sort((a, b) => b[0] - a[0])
@@ -130,6 +126,11 @@ function Dashboard() {
             </div>
           )}
         </main>
+
+        {/* Right Chatbot */}
+        <aside className="chatbot-sidebar">
+          <ChatBot selectedPlayer={selectedPlayer} />
+        </aside>
       </div>
     </div>
   );
