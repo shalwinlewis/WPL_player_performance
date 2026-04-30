@@ -175,3 +175,40 @@
 .chatbot-messages::-webkit-scrollbar-thumb:hover {
   background: #667eea;
 }
+
+.chatbot-suggestions {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #eee;
+  background: #f9f9f9;
+}
+
+.chatbot-suggestions p {
+  margin: 0 0 0.5rem 0;
+  font-size: 11px;
+  color: #999;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.suggestion-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.suggestion-btn {
+  padding: 0.4rem 0.75rem;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #667eea;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.suggestion-btn:hover {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}

@@ -1,0 +1,89 @@
+.team-stats-container {
+  padding: 2rem 1rem;
+}
+
+.team-stats-container h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.team-stats-placeholder {
+  text-align: center;
+  padding: 2rem;
+  color: #999;
+}
+
+.team-overview {
+  margin-bottom: 2rem;
+}
+
+.team-overview h3 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.team-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1.5rem;
+  border-radius: 8px;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.team-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.team-stat {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  font-size: 13px;
+}
+
+.team-stat span {
+  opacity: 0.9;
+}
+
+.team-stat strong {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.chart-wrapper {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.chart-wrapper h3 {
+  font-size: 16px;
+  color: #667eea;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .teams-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .team-stats-container h2 {
+    font-size: 1.5rem;
+  }
+}

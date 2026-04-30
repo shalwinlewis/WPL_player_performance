@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import './Dashboard.css';
 import PlayerChart from './PlayerChart';
 import ChatBot from './ChatBot';
+import ComparisonView from './ComparisonView';
 
 const API_URL = 'http://localhost:5000';
 
@@ -16,7 +17,8 @@ function Dashboard() {
     fetchPlayers();
   }, []);
 
-  const fetchPlayers = async () => {
+  // Memoize fetch function
+  const fetchPlayers = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axios.get(`${API_URL}/api/players`);
@@ -28,12 +30,15 @@ function Dashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const filteredPlayers = players.filter(p =>
-    p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    p.team.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filter players by search (memoized)
+  const filteredPlayers = useMemo(() => {
+    return players.filter(p =>
+      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      p.team.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [players, searchTerm]);
 
   return (
     <div className="dashboard">
@@ -119,6 +124,10 @@ function Dashboard() {
                     </div>
                   ))}
               </div>
+
+              {/* Add Comparison Component */}
+              <ComparisonView allPlayers={players} selectedPlayer={selectedPlayer} />
+
             </div>
           ) : (
             <div className="no-selection">

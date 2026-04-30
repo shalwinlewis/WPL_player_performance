@@ -1,0 +1,112 @@
+.comparison-container {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border-top: 2px solid #eee;
+}
+
+.comparison-container h3 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.comparison-placeholder {
+  text-align: center;
+  padding: 2rem;
+  color: #999;
+}
+
+.comparison-selector {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 6px;
+}
+
+.comparison-selector p {
+  margin: 0 0 0.75rem 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.comparison-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+}
+
+.comparison-select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.h2h-stats {
+  margin-top: 1.5rem;
+}
+
+.h2h-stats h4 {
+  color: #667eea;
+  margin-bottom: 1rem;
+  font-size: 14px;
+}
+
+.h2h-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.h2h-item {
+  background: white;
+  padding: 1rem;
+  border-radius: 6px;
+  border-left: 3px solid #667eea;
+}
+
+.h2h-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #999;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.stat-values {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.stat-value {
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.stat-value.winner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.vs {
+  font-size: 12px;
+  color: #999;
+  font-weight: 500;
+}

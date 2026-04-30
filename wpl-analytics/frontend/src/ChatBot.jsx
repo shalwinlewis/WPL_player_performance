@@ -17,7 +17,6 @@ function ChatBot({ selectedPlayer }) {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Auto-scroll to latest message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -26,7 +25,6 @@ function ChatBot({ selectedPlayer }) {
     e.preventDefault();
     if (!input.trim()) return;
 
-    // Add user message
     const userMessage = {
       id: messages.length + 1,
       role: 'user',
@@ -38,53 +36,81 @@ function ChatBot({ selectedPlayer }) {
     setLoading(true);
 
     try {
-      // Prepare response based on query and selected player
       let response = '';
+      const query = input.toLowerCase();
 
       if (!selectedPlayer) {
-        response =
-          'Please select a player first to get detailed information about them!';
+        response = 'Please select a player first to get detailed information about them!';
       } else {
-        const query = input.toLowerCase();
+        const seasons = Object.keys(selectedPlayer.seasonal_stats).map(Number).sort((a, b) => b - a);
+        const latestSeason = selectedPlayer.seasonal_stats[seasons[0]];
+        const previousSeason = seasons[1] ? selectedPlayer.seasonal_stats[seasons[1]] : null;
 
-        // Simple response logic
         if (
           query.includes('average') ||
           query.includes('avg') ||
-          query.includes('batting')
+          query.includes('batting') ||
+          query.includes('performance')
         ) {
-          const avgData = selectedPlayer.seasonal_stats;
-          const seasons = Object.entries(avgData)
-            .map(
-              ([s, d]) => `Season ${s}: ${d.avg} average (${d.runs} runs in ${d.matches} matches)`
-            )
-            .join(' | ');
-          response = `${selectedPlayer.name}'s batting averages: ${seasons}`;
-        } else if (
-          query.includes('strike') ||
-          query.includes('sr')
-        ) {
-          const srData = selectedPlayer.seasonal_stats;
-          const seasons = Object.entries(srData)
-            .map(([s, d]) => `Season ${s}: ${d.sr}`)
-            .join(' | ');
-          response = `${selectedPlayer.name}'s strike rates: ${seasons}`;
+          const avgChange = previousSeason
+            ? ((latestSeason.avg - previousSeason.avg) / previousSeason.avg * 100).toFixed(1)
+            : 'N/A';
+          response = `${selectedPlayer.name}'s batting statistics:\n`;
+          response += `Latest Season (${seasons[0]}): Average ${latestSeason.avg}\n`;
+          response += `${avgChange !== 'N/A' ? `Change from previous: ${avgChange}%\n` : ''}`;
+          response += `All Seasons: ${Object.entries(selectedPlayer.seasonal_stats)
+            .map(([s, d]) => `${s}: ${d.avg}`)
+            .join(', ')}`;
+        } else if (query.includes('strike') || query.includes('sr')) {
+          response = `${selectedPlayer.name}'s strike rate statistics:\n`;
+          response += `Latest: ${latestSeason.sr}\n`;
+          response += `All Seasons: ${Object.entries(selectedPlayer.seasonal_stats)
+            .map(([s, d]) => `${s}: ${d.sr}`)
+            .join(', ')}`;
         } else if (query.includes('runs') || query.includes('score')) {
-          const runsData = selectedPlayer.seasonal_stats;
-          const totalRuns = Object.values(runsData).reduce((sum, d) => sum + d.runs, 0);
-          response = `${selectedPlayer.name} scored ${totalRuns} total runs across all seasons.`;
-        } else if (query.includes('team')) {
-          response = `${selectedPlayer.name} plays for ${selectedPlayer.team} as a ${selectedPlayer.role}.`;
-        } else if (query.includes('matches')) {
-          const matchesData = selectedPlayer.seasonal_stats;
-          const totalMatches = Object.values(matchesData).reduce((sum, d) => sum + d.matches, 0);
-          response = `${selectedPlayer.name} has played ${totalMatches} matches in total.`;
+          const totalRuns = Object.values(selectedPlayer.seasonal_stats).reduce(
+            (sum, d) => sum + d.runs,
+            0
+          );
+          const avgRuns = (totalRuns / Object.keys(selectedPlayer.seasonal_stats).length).toFixed(0);
+          response = `${selectedPlayer.name} scoring statistics:\n`;
+          response += `Total Career Runs: ${totalRuns}\n`;
+          response += `Average per Season: ${avgRuns}\n`;
+          response += `Latest Season (${seasons[0]}): ${latestSeason.runs} runs`;
+        } else if (query.includes('team') || query.includes('which team')) {
+          response = `${selectedPlayer.name} details:\n`;
+          response += `Team: ${selectedPlayer.team}\n`;
+          response += `Role: ${selectedPlayer.role}\n`;
+          response += `Playing style: ${selectedPlayer.role.includes('Batter') ? 'Batsman' : 'All-rounder'}`;
+        } else if (query.includes('matches') || query.includes('how many')) {
+          const totalMatches = Object.values(selectedPlayer.seasonal_stats).reduce(
+            (sum, d) => sum + d.matches,
+            0
+          );
+          response = `${selectedPlayer.name}'s match statistics:\n`;
+          response += `Total Matches: ${totalMatches}\n`;
+          response += `Latest Season (${seasons[0]}): ${latestSeason.matches} matches\n`;
+          response += `Matches by season: ${Object.entries(selectedPlayer.seasonal_stats)
+            .map(([s, d]) => `${s}: ${d.matches}`)
+            .join(', ')}`;
+        } else if (query.includes('best') || query.includes('peak')) {
+          const bestSeason = Object.entries(selectedPlayer.seasonal_stats).reduce((a, b) =>
+            a[1].avg > b[1].avg ? a : b
+          );
+          response = `${selectedPlayer.name}'s best season was ${bestSeason[0]} with an average of ${bestSeason[1].avg}!`;
+        } else if (query.includes('compare') || query.includes('versus')) {
+          response = `To compare ${selectedPlayer.name} with another player, use the comparison tool below the stats!`;
         } else {
-          response = `I'm analyzing ${selectedPlayer.name}'s performance. Ask me about their average, strike rate, runs, team, or matches!`;
+          response = `I can help you with information about ${selectedPlayer.name}. Try asking about:\n`;
+          response += `• Average or batting performance\n`;
+          response += `• Strike rate\n`;
+          response += `• Runs scored\n`;
+          response += `• Team and role\n`;
+          response += `• Match statistics\n`;
+          response += `• Best season or peak performance`;
         }
       }
 
-      // Add bot response
       const botMessage = {
         id: messages.length + 2,
         role: 'bot',
@@ -135,6 +161,30 @@ function ChatBot({ selectedPlayer }) {
           </div>
         )}
         <div ref={messagesEndRef} />
+      </div>
+
+      {/* Quick Suggestion Buttons */}
+      <div className="chatbot-suggestions">
+        <p>Quick questions:</p>
+        <div className="suggestion-buttons">
+          {selectedPlayer && [
+            { text: "What's the average?", query: "What's the average?" },
+            { text: 'Show strike rate', query: 'Show strike rate' },
+            { text: 'How many runs?', query: 'How many runs?' },
+            { text: 'Best season?', query: "What's the best season?" },
+          ].map((btn, idx) => (
+            <button
+              key={idx}
+              className="suggestion-btn"
+              onClick={(e) => {
+                e.preventDefault();
+                setInput(btn.query);
+              }}
+            >
+              {btn.text}
+            </button>
+          ))}
+        </div>
       </div>
 
       <form className="chatbot-form" onSubmit={handleSendMessage}>
