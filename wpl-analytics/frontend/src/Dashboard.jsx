@@ -5,7 +5,7 @@ import PlayerChart from './PlayerChart';
 import ChatBot from './ChatBot';
 import ComparisonView from './ComparisonView';
 
-const API_URL = 'http://localhost:5000';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 function Dashboard() {
   const [players, setPlayers] = useState([]);
@@ -13,24 +13,24 @@ function Dashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetchPlayers();
-  }, [fetchPlayers]);
-
   // Memoize fetch function
-  const fetchPlayers = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`${API_URL}/api/players`);
-      setPlayers(response.data);
-      console.log(`✅ Loaded ${response.data.length} players`);
-    } catch (error) {
-      console.error('Error fetching players:', error);
-      alert('Failed to load players. Is backend running?');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+const fetchPlayers = useCallback(async () => {
+  setLoading(true);
+  try {
+    const response = await axios.get(`${API_URL}/api/players`);
+    setPlayers(response.data);
+    console.log(`✅ Loaded ${response.data.length} players`);
+  } catch (error) {
+    console.error('Error fetching players:', error);
+    alert('Failed to load players. Is backend running?');
+  } finally {
+    setLoading(false);
+  }
+}, []);
+
+useEffect(() => {
+  fetchPlayers();
+}, [fetchPlayers]);
 
   // Filter players by search (memoized)
   const filteredPlayers = useMemo(() => {
