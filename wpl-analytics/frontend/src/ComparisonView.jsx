@@ -8,11 +8,6 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar,
 } from 'recharts';
 import './ComparisonView.css';
 
@@ -27,9 +22,6 @@ function ComparisonView({ allPlayers, selectedPlayer }) {
     );
   }
 
-  const comparisonPlayers = compareWith
-    ? [selectedPlayer, compareWith]
-    : [selectedPlayer];
 
   // Prepare comparison data for bar chart
   const comparisonData = [

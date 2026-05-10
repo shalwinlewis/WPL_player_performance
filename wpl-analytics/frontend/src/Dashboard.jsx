@@ -15,7 +15,7 @@ function Dashboard() {
 
   useEffect(() => {
     fetchPlayers();
-  }, []);
+  }, [fetchPlayers]);
 
   // Memoize fetch function
   const fetchPlayers = useCallback(async () => {

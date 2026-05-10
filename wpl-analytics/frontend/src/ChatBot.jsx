@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
 import './ChatBot.css';
 
-const API_URL = 'http://localhost:5000';
 
 function ChatBot({ selectedPlayer }) {
   const [messages, setMessages] = useState([
