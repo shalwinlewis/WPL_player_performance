@@ -14,6 +14,8 @@ import PerformanceAnalytics from './PerformanceAnalytics';
 import './App.css';
 import AdminDashboard from './AdminDashboard';
 import DataImporter from './DataImporter';
+import LiveMatches from './LiveMatches';
+import Notifications from './Notifications';
 
 function AppContent() {
   const { user } = useContext(AuthContext);
@@ -32,6 +34,8 @@ function AppContent() {
           <li><a href="/predictions">Predictions</a></li>
           <li><a href="/teams">Teams</a></li>
           <li><a href="/profile">Profile</a></li>
+          <li><a href="/live">🔴 Live Matches</a></li>
+          <li><a href="/notifications">🔔 Notifications</a></li>
           <li className="dropdown">
             <a href="#">Advanced Features ▼</a>
             <div className="dropdown-menu">
@@ -65,6 +69,8 @@ function AppContent() {
         <Route path="/analytics" element={<PerformanceAnalytics />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/import" element={<DataImporter />} />
+        <Route path="/live" element={<LiveMatches />} />
+        <Route path="/notifications" element={<Notifications />} />
       </Routes>
     </Router>
   );

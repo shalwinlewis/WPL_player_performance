@@ -1,9 +1,17 @@
 const express = require('express');
+const http = require('http');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
+const initializeSocket = require('./socket-setup');
 
 const app = express();
+const server = http.createServer(app);
+
+// Initialize WebSocket
+const { io, socketMethods } = initializeSocket(server);
+app.locals.io = io;
+app.locals.socketMethods = socketMethods;
 
 app.use(cors({
   origin: ['http://localhost:3000', 'http://localhost:3001'],
@@ -58,7 +66,9 @@ app.use((req, res) => {
   });
 });
 
-const PORT = require('./routes/admin');
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 5000;
+
+server.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`⚡ WebSocket enabled`);
 });
