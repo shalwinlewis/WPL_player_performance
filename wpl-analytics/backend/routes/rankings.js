@@ -3,6 +3,7 @@ const Player = require('../models/Player');
 
 const router = express.Router();
 
+// TOP BATSMEN BY RUNS
 router.get('/batsmen/runs', async (req, res) => {
   try {
     const batsmen = await Player.find({ role: { $in: ['Batter', 'All-rounder'] } })
@@ -13,9 +14,9 @@ router.get('/batsmen/runs', async (req, res) => {
       rank: index + 1,
       name: player.name,
       team: player.team,
-      runs: player.totalRuns,
-      matches: player.matches,
-      average: player.average,
+      runs: player.totalRuns || 0,
+      matches: player.matches || 0,
+      average: player.average || 0,
     }));
 
     res.json(rankings);
@@ -25,6 +26,7 @@ router.get('/batsmen/runs', async (req, res) => {
   }
 });
 
+// TOP BATSMEN BY AVERAGE
 router.get('/batsmen/average', async (req, res) => {
   try {
     const batsmen = await Player.find({
@@ -38,9 +40,9 @@ router.get('/batsmen/average', async (req, res) => {
       rank: index + 1,
       name: player.name,
       team: player.team,
-      average: player.average,
-      matches: player.matches,
-      runs: player.totalRuns,
+      average: player.average || 0,
+      matches: player.matches || 0,
+      runs: player.totalRuns || 0,
     }));
 
     res.json(rankings);
@@ -50,6 +52,7 @@ router.get('/batsmen/average', async (req, res) => {
   }
 });
 
+// TOP BOWLERS BY WICKETS
 router.get('/bowlers/wickets', async (req, res) => {
   try {
     const bowlers = await Player.find({ role: { $in: ['Bowler', 'All-rounder'] } })
@@ -60,8 +63,8 @@ router.get('/bowlers/wickets', async (req, res) => {
       rank: index + 1,
       name: player.name,
       team: player.team,
-      wickets: player.wickets,
-      matches: player.matches,
+      wickets: player.wickets || 0,
+      matches: player.matches || 0,
       economy: player.economy || 'N/A',
     }));
 
@@ -72,6 +75,7 @@ router.get('/bowlers/wickets', async (req, res) => {
   }
 });
 
+// TOP BOWLERS BY ECONOMY
 router.get('/bowlers/economy', async (req, res) => {
   try {
     const bowlers = await Player.find({
@@ -86,8 +90,8 @@ router.get('/bowlers/economy', async (req, res) => {
       name: player.name,
       team: player.team,
       economy: player.economy || 'N/A',
-      wickets: player.wickets,
-      matches: player.matches,
+      wickets: player.wickets || 0,
+      matches: player.matches || 0,
     }));
 
     res.json(rankings);
@@ -97,6 +101,7 @@ router.get('/bowlers/economy', async (req, res) => {
   }
 });
 
+// TOP STRIKE RATE
 router.get('/strikeRate', async (req, res) => {
   try {
     const players = await Player.find({
@@ -110,9 +115,9 @@ router.get('/strikeRate', async (req, res) => {
       rank: index + 1,
       name: player.name,
       team: player.team,
-      strikeRate: player.strikeRate,
-      matches: player.matches,
-      runs: player.totalRuns,
+      strikeRate: player.strikeRate || 0,
+      matches: player.matches || 0,
+      runs: player.totalRuns || 0,
     }));
 
     res.json(rankings);
@@ -122,6 +127,7 @@ router.get('/strikeRate', async (req, res) => {
   }
 });
 
+// OVERALL PLAYER RANKINGS
 router.get('/overall', async (req, res) => {
   try {
     const players = await Player.find().limit(50);
@@ -143,10 +149,10 @@ router.get('/overall', async (req, res) => {
           team: player.team,
           role: player.role,
           overallScore,
-          runs: player.totalRuns,
-          average: player.average,
-          wickets: player.wickets,
-          matches: player.matches,
+          runs: player.totalRuns || 0,
+          average: player.average || 0,
+          wickets: player.wickets || 0,
+          matches: player.matches || 0,
         };
       })
       .sort((a, b) => b.overallScore - a.overallScore)
