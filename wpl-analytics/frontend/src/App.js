@@ -12,6 +12,8 @@ import PlayerComparison from './PlayerComparison';
 import MatchPredictions from './MatchPredictions';
 import PerformanceAnalytics from './PerformanceAnalytics';
 import './App.css';
+import AdminDashboard from './AdminDashboard';
+import DataImporter from './DataImporter';
 
 function AppContent() {
   const { user } = useContext(AuthContext);
@@ -39,6 +41,15 @@ function AppContent() {
               <a href="/analytics">Performance Analytics</a>
             </div>
           </li>
+          {user?.isAdmin && (
+            <li className="dropdown">
+              <a href="#">Admin ▼</a>
+              <div className="dropdown-menu">
+                <a href="/admin">Dashboard</a>
+                <a href="/admin/import">Import Data</a>
+              </div>
+            </li>
+          )}
         </ul>
       </nav>
 
@@ -52,6 +63,8 @@ function AppContent() {
         <Route path="/player-comparison" element={<PlayerComparison />} />
         <Route path="/match-predictions" element={<MatchPredictions />} />
         <Route path="/analytics" element={<PerformanceAnalytics />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/import" element={<DataImporter />} />
       </Routes>
     </Router>
   );

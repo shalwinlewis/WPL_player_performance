@@ -6,7 +6,7 @@ require('dotenv').config();
 const app = express();
 
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
   credentials: true,
 }));
 app.use(express.json());
@@ -26,6 +26,7 @@ const authRoutes = require('./routes/auth');
 const predictionsRoutes = require('./routes/predictions');
 const rankingsRoutes = require('./routes/rankings');
 const teamsRoutes = require('./routes/teams');
+const adminRoutes = require('./routes/admin');
 
 app.get('/api/health', (req, res) => {
   res.json({
@@ -40,6 +41,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/predictions', predictionsRoutes);
 app.use('/api/rankings', rankingsRoutes);
 app.use('/api/teams', teamsRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.use((err, req, res, next) => {
   console.error('Error:', err);
@@ -56,7 +58,7 @@ app.use((req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = require('./routes/admin');
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
