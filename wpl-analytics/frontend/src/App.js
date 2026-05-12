@@ -7,16 +7,11 @@ import RankingsPage from './RankingsPage';
 import PredictionsPage from './PredictionsPage';
 import TeamComparison from './TeamComparison';
 import UserProfile from './UserProfile';
+import HistoricalCharts from './HistoricalCharts';
+import PlayerComparison from './PlayerComparison';
+import MatchPredictions from './MatchPredictions';
+import PerformanceAnalytics from './PerformanceAnalytics';
 import './App.css';
-
-const ProtectedRoute = ({ element }) => {
-  const { user, loading } = useContext(AuthContext);
-
-  if (loading) return <div>Loading...</div>;
-  if (!user) return <Navigate to="/login" />;
-
-  return element;
-};
 
 function AppContent() {
   const { user } = useContext(AuthContext);
@@ -35,6 +30,15 @@ function AppContent() {
           <li><a href="/predictions">Predictions</a></li>
           <li><a href="/teams">Teams</a></li>
           <li><a href="/profile">Profile</a></li>
+          <li className="dropdown">
+            <a href="#">Advanced Features ▼</a>
+            <div className="dropdown-menu">
+              <a href="/historical">Historical Trends</a>
+              <a href="/player-comparison">Player Comparison</a>
+              <a href="/match-predictions">Match Predictions</a>
+              <a href="/analytics">Performance Analytics</a>
+            </div>
+          </li>
         </ul>
       </nav>
 
@@ -44,6 +48,10 @@ function AppContent() {
         <Route path="/predictions" element={<PredictionsPage />} />
         <Route path="/teams" element={<TeamComparison />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/historical" element={<HistoricalCharts />} />
+        <Route path="/player-comparison" element={<PlayerComparison />} />
+        <Route path="/match-predictions" element={<MatchPredictions />} />
+        <Route path="/analytics" element={<PerformanceAnalytics />} />
       </Routes>
     </Router>
   );
