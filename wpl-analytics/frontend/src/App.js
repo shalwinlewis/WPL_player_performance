@@ -16,6 +16,7 @@ import AdminDashboard from './AdminDashboard';
 import DataImporter from './DataImporter';
 import LiveMatches from './LiveMatches';
 import Notifications from './Notifications';
+import MLPredictions from './MLPredictions';
 
 function AppContent() {
   const { user } = useContext(AuthContext);
@@ -36,6 +37,7 @@ function AppContent() {
           <li><a href="/profile">Profile</a></li>
           <li><a href="/live">🔴 Live Matches</a></li>
           <li><a href="/notifications">🔔 Notifications</a></li>
+          <li><a href="/ml">🤖 ML Predictions</a></li>
           <li className="dropdown">
             <a href="#">Advanced Features ▼</a>
             <div className="dropdown-menu">
@@ -71,6 +73,7 @@ function AppContent() {
         <Route path="/admin/import" element={<DataImporter />} />
         <Route path="/live" element={<LiveMatches />} />
         <Route path="/notifications" element={<Notifications />} />
+        <Route path="/ml" element={<MLPredictions />} />
       </Routes>
     </Router>
   );
